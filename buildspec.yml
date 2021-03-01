@@ -13,3 +13,5 @@ artifacts:
 cache:
   paths:
     - "/root/.npm/**/*"
+  exclude-paths:
+    - ".git"
