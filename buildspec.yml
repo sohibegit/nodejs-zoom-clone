@@ -16,5 +16,4 @@ artifacts:
     - views/
     - server.js
     - package.json
-  exclude-paths:
-    - ".git"
+  discard-paths: no
