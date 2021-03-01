@@ -4,7 +4,7 @@ const app = express();
 // const cors = require("cors");
 // app.use(cors({ allowedHeaders: "*", origin: "*" }));
 
-const server = require("https").Server(app);
+const server = require("http").Server(app);
 const io = require("socket.io")(server);
 
 const { ExpressPeerServer } = require("peer");
