@@ -10,8 +10,5 @@ phases:
 artifacts:
   files:
     - /**/*
-cache:
-  paths:
-    - "/root/.npm/**/*"
   exclude-paths:
     - ".git"
