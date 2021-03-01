@@ -11,6 +11,9 @@ phases:
       - ls -la
 artifacts:
   files:
-    - /**/*
+    - node_modules/
+    - public/
+    - views/
+    - index.js
   exclude-paths:
     - ".git"
