@@ -3,7 +3,7 @@ const videoGrid = document.getElementById("video-grid");
 const myPeer = new Peer(undefined, {
   path: "/peerjs",
   host: "/",
-  port: "443",
+  port: HTTPS_PORT || "8080",
 });
 let myVideoStream;
 const myVideo = document.createElement("video");
@@ -22,6 +22,20 @@ myPeer.on("open", (id) => {
   socket.emit("join-room", ROOM_ID, id);
 });
 
+// input value
+let text = $("input");
+// when press enter send message
+$("html").keydown(function (e) {
+  if (e.which == 13 && text.val().length !== 0) {
+    socket.emit("message", text.val());
+    text.val("");
+  }
+});
+socket.on("createMessage", (message) => {
+  $("ul").append(`<li class="message"><b>المستخدم</b><br/>${message}</li>`);
+  scrollToBottom();
+});
+
 function switchFunction(switchBetween, options) {
   navigator.mediaDevices[switchBetween](options).then((stream) => {
     myVideoStream = stream;
@@ -33,22 +47,8 @@ function switchFunction(switchBetween, options) {
         addVideoStream(video, userVideoStream);
       });
     });
-
     socket.on("user-connected", (userId) => {
       connectToNewUser(userId, stream);
-    });
-    // input value
-    let text = $("input");
-    // when press enter send message
-    $("html").keydown(function (e) {
-      if (e.which == 13 && text.val().length !== 0) {
-        socket.emit("message", text.val());
-        text.val("");
-      }
-    });
-    socket.on("createMessage", (message) => {
-      $("ul").append(`<li class="message"><b>المستخدم</b><br/>${message}</li>`);
-      scrollToBottom();
     });
   });
 }

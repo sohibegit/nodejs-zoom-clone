@@ -24,9 +24,9 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.redirect(`/${uuidV4()}`);
 });
-
+console.log("process.env.HTTPS_PORT: ", process.env.HTTPS_PORT);
 app.get("/:room", (req, res) => {
-  res.render("room", { roomId: req.params.room });
+  res.render("room", { roomId: req.params.room, httpsPort: process.env.HTTPS_PORT });
 });
 
 io.on("connection", (socket) => {
