@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://kit.fontawesome.com/c939d0e917.js"></script>
     <script src="/reload/reload.js"></script>
-    <!-- it's necessary -->
 
     <script src="script.js" defer></script>
 
@@ -40,6 +39,10 @@
         object-fit: cover;
         padding: 8px;
       }
+      .is-screen {
+        height: 100%;
+        width: 100%;
+      }
       .message {
         float: right;
       }
@@ -54,33 +57,18 @@
         <div class="main__controls">
           <div class="main__controls__block">
             <div onclick="muteUnmute()" class="main__controls__button main__mute_button">
-              <i class="fas fa-microphone"></i>
+              <i class="fas fa-microphone align-middle"></i>
               <span>كتم الصوت</span>
             </div>
             <div onclick="playStop()" class="main__controls__button main__video_button">
-              <i class="fas fa-video"></i>
+              <i class="fas fa-video align-middle"></i>
               <span>ايقاف الفيديو</span>
             </div>
-          </div>
-          <!-- <div class="main__controls__block">
-               <div class="main__controls__button">
-                  <i class="fas fa-shield-alt"></i>
-                  <span>Security</span>
-               </div>
-               <div class="main__controls__button">
-                  <i class="fas fa-user-friends"></i>
-                  <span>Participants</span>
-               </div>
-               <div class="main__controls__button">
-                  <i class="fas fa-comment-alt"></i>
-                  <span>Chat</span>
-               </div>
+            <div onclick="shareScreen()" class="main__controls__button main__video_button">
+              <i class="fas fa-desktop align-middle"></i>
+              <span>مشاركة الشاشة</span>
             </div>
-            <div class="main__controls__block">
-               <div class="main__controls__button">
-                  <span class="leave_meeting">Leave Meeting</span>
-               </div>
-            </div> -->
+          </div>
         </div>
       </div>
       <div class="main__right">

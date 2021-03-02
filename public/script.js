@@ -9,12 +9,21 @@ let myVideoStream;
 const myVideo = document.createElement("video");
 myVideo.muted = true;
 const peers = {};
-navigator.mediaDevices
-  .getUserMedia({
-    video: true,
-    audio: true,
-  })
-  .then((stream) => {
+
+let isScreenSharing = false;
+
+switchFunction("getUserMedia", { audio: true, video: true });
+
+socket.on("user-disconnected", (userId) => {
+  if (peers[userId]) peers[userId].close();
+});
+
+myPeer.on("open", (id) => {
+  socket.emit("join-room", ROOM_ID, id);
+});
+
+function switchFunction(switchBetween, options) {
+  navigator.mediaDevices[switchBetween](options).then((stream) => {
     myVideoStream = stream;
     addVideoStream(myVideo, stream);
     myPeer.on("call", (call) => {
@@ -42,14 +51,7 @@ navigator.mediaDevices
       scrollToBottom();
     });
   });
-
-socket.on("user-disconnected", (userId) => {
-  if (peers[userId]) peers[userId].close();
-});
-
-myPeer.on("open", (id) => {
-  socket.emit("join-room", ROOM_ID, id);
-});
+}
 
 function connectToNewUser(userId, stream) {
   const call = myPeer.call(userId, stream);
@@ -65,6 +67,11 @@ function connectToNewUser(userId, stream) {
 }
 
 function addVideoStream(video, stream) {
+  if (isScreenSharing) {
+    video.classList.add("is-screen");
+  } else {
+    video.classList.remove("is-screen");
+  }
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
@@ -100,6 +107,29 @@ const playStop = () => {
   }
 };
 
+const gdmOptions = {
+  video: {
+    cursor: "always",
+  },
+  audio: {
+    echoCancellation: true,
+    noiseSuppression: true,
+    sampleRate: 44100,
+  },
+};
+const shareScreen = () => {
+  console.log("shareScreen");
+  if (!isScreenSharing) {
+    switchFunction("getDisplayMedia", gdmOptions);
+    stopAllTracks();
+    isScreenSharing = true;
+  } else {
+    switchFunction("getUserMedia", { audio: true, video: true });
+    stopAllTracks();
+    isScreenSharing = false;
+  }
+};
+
 const setMuteButton = () => {
   const html = `
     <i class="fas fa-microphone"></i>
@@ -131,3 +161,7 @@ const setPlayVideo = () => {
   `;
   document.querySelector(".main__video_button").innerHTML = html;
 };
+function stopAllTracks() {
+  let tracks = myVideoStream.getTracks();
+  tracks.forEach((track) => track.stop());
+}
