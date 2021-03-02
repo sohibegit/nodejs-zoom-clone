@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const reload = require("reload");
 
 // const cors = require("cors");
 // app.use(cors({ allowedHeaders: "*", origin: "*" }));
@@ -43,6 +44,6 @@ io.on("connection", (socket) => {
     });
   });
 });
-console.log("running on PORT: ", process.env.PORT);
-console.log(process.env.PORT);
 server.listen(process.env.PORT || 8080);
+reload(app);
+console.log("running on http://localhost:" + (process.env.PORT || 8080));
