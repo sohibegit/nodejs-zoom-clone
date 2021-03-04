@@ -15,6 +15,7 @@ let isScreenSharing = false;
 switchFunction("getUserMedia", { audio: true, video: true });
 
 socket.on("user-disconnected", (userId) => {
+  console.log("user-disconnected", userId);
   if (peers[userId]) peers[userId].close();
 });
 
@@ -48,6 +49,7 @@ function switchFunction(switchBetween, options) {
       });
     });
     socket.on("user-connected", (userId) => {
+      console.log("user-connected", userId);
       connectToNewUser(userId, stream);
     });
   });
