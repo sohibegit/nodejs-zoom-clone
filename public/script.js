@@ -27,10 +27,11 @@ socket.on("user-disconnected", (userId) => {
   }
 });
 
-await switchFunction("getUserMedia", { audio: true, video: true });
+switchFunction("getUserMedia", { audio: true, video: true });
 
 async function switchFunction(switchBetween, options) {
   await navigator.mediaDevices[switchBetween](options).then((stream) => {
+    console.log("stream started");
     myVideoStream = stream;
     addVideoStream(myVideo, stream);
     myPeer.on("call", (call) => {
