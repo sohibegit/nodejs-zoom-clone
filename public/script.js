@@ -1,6 +1,6 @@
 const socket = io("/");
 const videoGrid = document.getElementById("video-grid");
-const myPeer = new Peer(undefined, {
+let myPeer = new Peer(undefined, {
   path: "/peerjs",
   host: "/",
   port: HTTPS_PORT || "8080",
@@ -20,13 +20,7 @@ socket.on("user-disconnected", (userId) => {
     console.log("peers[userId]");
     document.getElementById(userId).remove();
     peers[userId].close();
-    delete peers[userId];
   }
-});
-
-myPeer.on("open", (id) => {
-  console.log("open id: ", id);
-  socket.emit("join-room", ROOM_ID, id);
 });
 
 // input value
@@ -130,13 +124,11 @@ const gdmOptions = {
 const shareScreen = async () => {
   console.log("shareScreen");
   if (!isScreenSharing) {
-    stopAllTracks();
-    myPeer.disconnect();
+    reset();
     await switchFunction("getDisplayMedia", gdmOptions);
     isScreenSharing = true;
   } else {
-    stopAllTracks();
-    myPeer.disconnect();
+    reset();
     await switchFunction("getUserMedia", { audio: true, video: true });
     isScreenSharing = false;
   }
@@ -173,6 +165,21 @@ const setPlayVideo = () => {
   `;
   document.querySelector(".main__video_button").innerHTML = html;
 };
+function reset() {
+  stopAllTracks();
+  myPeer.disconnect();
+  myPeer.destroy();
+  myPeer = new Peer(undefined, {
+    path: "/peerjs",
+    host: "/",
+    port: HTTPS_PORT || "8080",
+  });
+  myPeer.on("open", (id) => {
+    console.log("open id: ", id);
+    socket.emit("join-room", ROOM_ID, id);
+  });
+}
+
 function stopAllTracks() {
   let tracks = myVideoStream.getTracks();
   tracks.forEach((track) => track.stop());
