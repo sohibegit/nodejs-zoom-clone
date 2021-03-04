@@ -9,7 +9,7 @@ let myVideoStream;
 const myVideo = document.createElement("video");
 myVideo.muted = true;
 const peers = {};
-
+let myCall;
 let isScreenSharing = false;
 
 myPeer.on("open", (id) => {
@@ -34,7 +34,11 @@ async function switchFunction(switchBetween, options) {
     console.log("stream started");
     myVideoStream = stream;
     addVideoStream(myVideo, stream);
+    if (myCall) {
+      myCall.answer(stream);
+    }
     myPeer.on("call", (call) => {
+      myCall = call;
       call.answer(stream);
       const video = document.createElement("video");
       call.on("stream", (userVideoStream) => {
@@ -118,6 +122,7 @@ const shareScreen = async () => {
   } else {
     // reset();
     await switchFunction("getUserMedia", { audio: true, video: true });
+
     isScreenSharing = false;
   }
 };
