@@ -7,6 +7,7 @@
     <script>
       const ROOM_ID = "<%= roomId %>";
       const HTTPS_PORT = "<%= httpsPort %>";
+      const USER_NAME = "<%= username %>";
     </script>
     <link
       rel="stylesheet"
@@ -21,12 +22,12 @@
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
       crossorigin="anonymous"
     ></script>
-    <script src="/socket.io/socket.io.js" defer></script>
-    <link rel="stylesheet" href="style.css" />
+    <script src="../socket.io/socket.io.js" defer></script>
+    <link rel="stylesheet" href="../style.css" />
     <script src="https://kit.fontawesome.com/c939d0e917.js"></script>
-    <script src="/reload/reload.js"></script>
+    <!-- <script src="/reload/reload.js"></script> -->
 
-    <script src="script.js" defer></script>
+    <script src="../script.js" defer></script>
 
     <style>
       #video-grid {
@@ -45,7 +46,8 @@
         width: 100%;
       }
       .message {
-        float: right;
+        /* float: right; */
+        text-align: right;
       }
     </style>
   </head>

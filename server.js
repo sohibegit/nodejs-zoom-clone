@@ -1,34 +1,32 @@
 const express = require("express");
 const app = express();
-const reload = require("reload");
-
-// const cors = require("cors");
-// app.use(cors({ allowedHeaders: "*", origin: "*" }));
-
+// const reload = require("reload");
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
-
 const { ExpressPeerServer } = require("peer");
 const peerServer = ExpressPeerServer(server, {
   debug: true,
-  // port: 443,
-  // ssl: {},
 });
 const { v4: uuidV4 } = require("uuid");
 
 app.use("/peerjs", peerServer);
 
 app.set("view engine", "ejs");
+
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.redirect(`/${uuidV4()}`);
+  res.redirect(`/${uuidV4()}/testUser`);
 });
 console.log("process.env.HTTPS_PORT: ", process.env.HTTPS_PORT);
-app.get("/:room", (req, res) => {
-  res.render("room", { roomId: req.params.room, httpsPort: process.env.HTTPS_PORT });
+
+app.get("/:room/", (req, res) => {
+  res.redirect(`/${req.params.room}/testUser`);
 });
 
+app.get("/:room/:username", (req, res) => {
+  res.render("room", { roomId: req.params.room, httpsPort: process.env.HTTPS_PORT, username: req.params.username });
+});
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId) => {
     socket.join(roomId);
@@ -45,5 +43,5 @@ io.on("connection", (socket) => {
   });
 });
 server.listen(process.env.PORT || 8080);
-reload(app);
+// reload(app);
 console.log("running on http://localhost:" + (process.env.PORT || 8080));
