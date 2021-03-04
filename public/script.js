@@ -53,14 +53,13 @@ async function switchFunction(switchBetween, options) {
       call.on("stream", (userVideoStream) => {
         addVideoStream(video, userVideoStream);
       });
+      socket.on("user-connected", (userId) => {
+        console.log("user-connected", userId);
+        connectToNewUser(userId, stream);
+      });
     });
   });
 }
-
-socket.on("user-connected", (userId) => {
-  console.log("user-connected", userId);
-  connectToNewUser(userId, stream);
-});
 
 function connectToNewUser(userId, stream) {
   console.log("connectToNewUser: ", userId);
