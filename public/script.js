@@ -20,6 +20,7 @@ socket.on("user-disconnected", (userId) => {
     console.log("peers[userId]");
     document.getElementById(userId).remove();
     peers[userId].close();
+    delete peers[userId];
   }
 });
 
@@ -129,10 +130,14 @@ const gdmOptions = {
 const shareScreen = () => {
   console.log("shareScreen");
   if (!isScreenSharing) {
+    myPeer.disconnect();
+    myPeer.reconnect();
     switchFunction("getDisplayMedia", gdmOptions);
     stopAllTracks();
     isScreenSharing = true;
   } else {
+    myPeer.disconnect();
+    myPeer.reconnect();
     switchFunction("getUserMedia", { audio: true, video: true });
     stopAllTracks();
     isScreenSharing = false;
