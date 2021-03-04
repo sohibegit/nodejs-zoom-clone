@@ -19,6 +19,7 @@ myPeer.on("open", (id) => {
 
 socket.on("user-disconnected", (userId) => {
   console.log("user-disconnected", userId);
+  console.log(peers);
   if (peers[userId]) {
     console.log("peers[userId]");
     document.getElementById(userId).remove();
