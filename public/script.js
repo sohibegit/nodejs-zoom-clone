@@ -26,7 +26,7 @@ socket.on("user-disconnected", (userId) => {
   }
 });
 
-switchFunction("getUserMedia", { audio: true, video: true });
+await switchFunction("getUserMedia", { audio: true, video: true });
 
 async function switchFunction(switchBetween, options) {
   await navigator.mediaDevices[switchBetween](options).then((stream) => {
