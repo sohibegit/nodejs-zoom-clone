@@ -22,10 +22,6 @@ socket.on("user-disconnected", (userId) => {
   console.log(peers);
   if (peers[userId]) {
     console.log("peers[userId]");
-    const vidToRemove = document.getElementById(userId);
-    if (vidToRemove) {
-      vidToRemove.remove();
-    }
     const per = peers[userId];
     if (per) {
       per.close();
