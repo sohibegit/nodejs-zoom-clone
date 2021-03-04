@@ -9,7 +9,7 @@ let myVideoStream;
 const myVideo = document.createElement("video");
 myVideo.muted = true;
 const peers = {};
-let myCall;
+let peerConnection;
 let isScreenSharing = false;
 
 myPeer.on("open", (id) => {
@@ -39,12 +39,15 @@ async function switchFunction(switchBetween, options) {
   await navigator.mediaDevices[switchBetween](options).then((stream) => {
     console.log("stream started");
     myVideoStream = stream;
+
     addVideoStream(myVideo, stream);
     myPeer.on("call", (call) => {
-      const [audioSender, videoSender, screenSender] = call.peerConnection.getSenders();
-      console.log(audioSender, videoSender, screenSender);
+      setTimeout(() => {
+        peerConnection = call.peerConnection;
+      }, 2000);
       call.answer(myVideoStream);
       const video = document.createElement("video");
+      video.controls = true;
       call.on("stream", (userVideoStream) => {
         addVideoStream(video, userVideoStream);
       });
@@ -60,6 +63,7 @@ function connectToNewUser(userId, stream) {
   console.log("connectToNewUser: ", userId);
   const call = myPeer.call(userId, stream);
   const video = document.getElementById(userId) || document.createElement("video");
+  video.controls = true;
   video.id = userId;
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
@@ -111,21 +115,24 @@ const gdmOptions = {
   video: {
     cursor: "always",
   },
-  audio: {
-    echoCancellation: true,
-    noiseSuppression: true,
-    sampleRate: 44100,
-  },
+  audio: false,
 };
 const shareScreen = async () => {
   console.log("shareScreen");
   if (!isScreenSharing) {
+    console.log(peerConnection.getSenders());
+    var sender = peerConnection.getSenders().find((s) => s.track.kind === "video");
+    console.log(sender);
+
+    navigator.mediaDevices.getDisplayMedia(gdmOptions).then((stream) => {
+      sender.replaceTrack(stream.getTracks()[0]);
+    });
     // reset();
-    await switchFunction("getDisplayMedia", gdmOptions);
+    // await switchFunction("getDisplayMedia", gdmOptions);
     isScreenSharing = true;
   } else {
     // reset();
-    await switchFunction("getUserMedia", { audio: true, video: true });
+    // await switchFunction("getUserMedia", { audio: true, video: true });
 
     isScreenSharing = false;
   }
