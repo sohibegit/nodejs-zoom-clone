@@ -112,11 +112,11 @@ const gdmOptions = {
 const shareScreen = async () => {
   console.log("shareScreen");
   if (!isScreenSharing) {
-    reset();
+    // reset();
     await switchFunction("getDisplayMedia", gdmOptions);
     isScreenSharing = true;
   } else {
-    reset();
+    // reset();
     await switchFunction("getUserMedia", { audio: true, video: true });
     isScreenSharing = false;
   }
