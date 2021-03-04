@@ -20,6 +20,7 @@ socket.on("user-disconnected", (userId) => {
 });
 
 myPeer.on("open", (id) => {
+  console.log("open id: ", id);
   socket.emit("join-room", ROOM_ID, USER_NAME);
 });
 
