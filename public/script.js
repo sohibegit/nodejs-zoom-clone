@@ -1,6 +1,6 @@
 const socket = io("/");
 const videoGrid = document.getElementById("video-grid");
-let myPeer = new Peer(USER_NAME, {
+let myPeer = new Peer(undefined, {
   path: "/peerjs",
   host: "/",
   port: HTTPS_PORT || "8080",
@@ -54,12 +54,13 @@ async function switchFunction(switchBetween, options) {
         addVideoStream(video, userVideoStream);
       });
     });
-    socket.on("user-connected", (userId) => {
-      console.log("user-connected", userId);
-      connectToNewUser(userId, stream);
-    });
   });
 }
+
+socket.on("user-connected", (userId) => {
+  console.log("user-connected", userId);
+  connectToNewUser(userId, stream);
+});
 
 function connectToNewUser(userId, stream) {
   console.log("connectToNewUser: ", userId);
@@ -130,11 +131,11 @@ const gdmOptions = {
 const shareScreen = async () => {
   console.log("shareScreen");
   if (!isScreenSharing) {
-    // reset();
+    reset();
     await switchFunction("getDisplayMedia", gdmOptions);
     isScreenSharing = true;
   } else {
-    // reset();
+    reset();
     await switchFunction("getUserMedia", { audio: true, video: true });
     isScreenSharing = false;
   }
