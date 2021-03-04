@@ -12,7 +12,10 @@ const peers = {};
 
 let isScreenSharing = false;
 
-switchFunction("getUserMedia", { audio: true, video: true });
+myPeer.on("open", (id) => {
+  console.log("open id: ", id);
+  socket.emit("join-room", ROOM_ID, id);
+});
 
 socket.on("user-disconnected", (userId) => {
   console.log("user-disconnected", userId);
@@ -36,6 +39,8 @@ socket.on("createMessage", (message) => {
   $("ul").append(`<li class="message"><b>${USER_NAME}</b><br/>${message}</li>`);
   scrollToBottom();
 });
+
+switchFunction("getUserMedia", { audio: true, video: true });
 
 async function switchFunction(switchBetween, options) {
   await navigator.mediaDevices[switchBetween](options).then((stream) => {
