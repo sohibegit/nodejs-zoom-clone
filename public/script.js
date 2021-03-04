@@ -41,6 +41,8 @@ async function switchFunction(switchBetween, options) {
     myVideoStream = stream;
     addVideoStream(myVideo, stream);
     myPeer.on("call", (call) => {
+      const [audioSender, videoSender, screenSender] = call.peerConnection.getSenders();
+      console.log(audioSender, videoSender, screenSender);
       call.answer(myVideoStream);
       const video = document.createElement("video");
       call.on("stream", (userVideoStream) => {
