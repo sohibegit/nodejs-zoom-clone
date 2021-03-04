@@ -43,8 +43,8 @@ socket.on("createMessage", (message) => {
   scrollToBottom();
 });
 
-function switchFunction(switchBetween, options) {
-  navigator.mediaDevices[switchBetween](options).then((stream) => {
+async function switchFunction(switchBetween, options) {
+  await navigator.mediaDevices[switchBetween](options).then((stream) => {
     myVideoStream = stream;
     addVideoStream(myVideo, stream);
     myPeer.on("call", (call) => {
@@ -127,18 +127,16 @@ const gdmOptions = {
     sampleRate: 44100,
   },
 };
-const shareScreen = () => {
+const shareScreen = async () => {
   console.log("shareScreen");
   if (!isScreenSharing) {
-    switchFunction("getDisplayMedia", gdmOptions);
+    await switchFunction("getDisplayMedia", gdmOptions);
     stopAllTracks();
     isScreenSharing = true;
     myPeer.disconnect();
     myPeer.reconnect();
   } else {
-    myPeer.disconnect();
-    myPeer.reconnect();
-    switchFunction("getUserMedia", { audio: true, video: true });
+    await switchFunction("getUserMedia", { audio: true, video: true });
     stopAllTracks();
     isScreenSharing = false;
     myPeer.disconnect();
