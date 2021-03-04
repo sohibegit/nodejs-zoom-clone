@@ -40,12 +40,8 @@ async function switchFunction(switchBetween, options) {
     console.log("stream started");
     myVideoStream = stream;
     addVideoStream(myVideo, stream);
-    if (myCall) {
-      myCall.answer(stream);
-    }
     myPeer.on("call", (call) => {
-      myCall = call;
-      call.answer(stream);
+      call.answer(myVideoStream);
       const video = document.createElement("video");
       call.on("stream", (userVideoStream) => {
         addVideoStream(video, userVideoStream);
