@@ -51,7 +51,7 @@ async function switchFunction(switchBetween, options) {
 function connectToNewUser(userId, stream) {
   console.log("connectToNewUser: ", userId);
   const call = myPeer.call(userId, stream);
-  const video = document.createElement("video");
+  const video = document.getElementById(userId) || document.createElement("video");
   video.id = userId;
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
