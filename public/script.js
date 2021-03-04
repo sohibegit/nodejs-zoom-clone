@@ -16,7 +16,11 @@ switchFunction("getUserMedia", { audio: true, video: true });
 
 socket.on("user-disconnected", (userId) => {
   console.log("user-disconnected", userId);
-  if (peers[userId]) peers[userId].close();
+  if (peers[userId]) {
+    console.log("peers[userId]");
+    document.getElementById(userId).remove();
+    peers[userId].close();
+  }
 });
 
 myPeer.on("open", (id) => {
@@ -60,6 +64,7 @@ function connectToNewUser(userId, stream) {
   console.log("connectToNewUser: ", userId);
   const call = myPeer.call(userId, stream);
   const video = document.createElement("video");
+  video.id = userId;
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
   });
