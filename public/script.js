@@ -26,20 +26,6 @@ socket.on("user-disconnected", (userId) => {
   }
 });
 
-// input value
-let text = $("input");
-// when press enter send message
-$("html").keydown(function (e) {
-  if (e.which == 13 && text.val().length !== 0) {
-    socket.emit("message", text.val());
-    text.val("");
-  }
-});
-socket.on("createMessage", (message) => {
-  $("ul").append(`<li class="message"><b>${USER_NAME}</b><br/>${message}</li>`);
-  scrollToBottom();
-});
-
 switchFunction("getUserMedia", { audio: true, video: true });
 
 async function switchFunction(switchBetween, options) {
@@ -88,11 +74,6 @@ function addVideoStream(video, stream) {
   });
   videoGrid.append(video);
 }
-
-const scrollToBottom = () => {
-  var d = $(".main__chat_window");
-  d.scrollTop(d.prop("scrollHeight"));
-};
 
 const muteUnmute = () => {
   const enabled = myVideoStream.getAudioTracks()[0].enabled;
@@ -171,6 +152,7 @@ const setPlayVideo = () => {
   `;
   document.querySelector(".main__video_button").innerHTML = html;
 };
+
 function reset() {
   stopAllTracks();
   myPeer.disconnect();
@@ -190,3 +172,23 @@ function stopAllTracks() {
   let tracks = myVideoStream.getTracks();
   tracks.forEach((track) => track.stop());
 }
+
+const scrollToBottom = () => {
+  var d = $(".main__chat_window");
+  d.scrollTop(d.prop("scrollHeight"));
+};
+
+// input value
+let text = $("input");
+// when press enter send message
+$("html").keydown(function (e) {
+  if (e.which == 13 && text.val().length !== 0) {
+    socket.emit("message", text.val());
+    text.val("");
+  }
+});
+
+socket.on("createMessage", (message) => {
+  $("ul").append(`<li class="message"><b>${USER_NAME}</b><br/>${message}</li>`);
+  scrollToBottom();
+});
