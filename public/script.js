@@ -134,13 +134,11 @@ const shareScreen = async () => {
     myPeer.disconnect();
     await switchFunction("getDisplayMedia", gdmOptions);
     isScreenSharing = true;
-    myPeer.reconnect();
   } else {
     stopAllTracks();
     myPeer.disconnect();
     await switchFunction("getUserMedia", { audio: true, video: true });
     isScreenSharing = false;
-    myPeer.reconnect();
   }
 };
 
