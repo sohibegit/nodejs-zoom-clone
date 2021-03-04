@@ -158,7 +158,7 @@ function reset() {
   stopAllTracks();
   myPeer.disconnect();
   myPeer.destroy();
-  myPeer = new Peer(undefined, {
+  myPeer = new Peer(USER_NAME, {
     path: "/peerjs",
     host: "/",
     port: HTTPS_PORT || "8080",
