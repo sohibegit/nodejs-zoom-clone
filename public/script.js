@@ -113,23 +113,18 @@ const gdmOptions = {
   },
   audio: false,
 };
-const shareScreen = async () => {
-  console.log("shareScreen");
-  if (!isScreenSharing) {
-    console.log(peerConnection.getSenders());
-    var sender = peerConnection.getSenders().find((s) => s.track.kind === "video");
-    console.log(sender);
 
+const shareScreen = async () => {
+  if (!isScreenSharing) {
+    var sender = peerConnection.getSenders().find((s) => s.track.kind === "video");
+    let cameraTrack = sender.track;
     navigator.mediaDevices.getDisplayMedia(gdmOptions).then((stream) => {
-      sender.replaceTrack(stream.getTracks()[0]);
+      const screenTrack = stream.getTracks()[0];
+      sender.replaceTrack(screenTrack);
+      cameraTrack.stop();
     });
-    // reset();
-    // await switchFunction("getDisplayMedia", gdmOptions);
     isScreenSharing = true;
   } else {
-    // reset();
-    // await switchFunction("getUserMedia", { audio: true, video: true });
-
     isScreenSharing = false;
   }
 };
